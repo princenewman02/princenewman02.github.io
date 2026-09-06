@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prince</title>
+<style>
+  :root {
+    --bg: #fbfbf9;
+    --ink: #1c1d1b;
+    --muted: #6b6d68;
+    --accent: #2b3a67;
+    --accent-warm: #a9793e;
+    --rule: #e3e1d9;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: 19px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 14vh 24px 10vh;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 10vh 20px 8vh; }
+    body { font-size: 18px; }
+  }
+
+  nav {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 3.2em;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    margin-right: 1.4em;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--muted);
+  }
+
+  h1 {
+    font-size: 1.5em;
+    font-weight: 400;
+    margin: 0 0 0.9em;
+    letter-spacing: 0.2px;
+  }
+
+  p {
+    margin: 0 0 1.3em;
+    max-width: 34em;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration-color: rgba(43, 58, 103, 0.35);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease;
+  }
+
+  a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .warm-link {
+    color: var(--accent-warm);
+    text-decoration-color: rgba(169, 121, 62, 0.4);
+  }
+
+  .warm-link:hover {
+    text-decoration-color: var(--accent-warm);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    border: none;
+    margin: 2.6em 0;
+  }
+
+  footer {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--muted);
+    margin-right: 1.2em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  footer a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--muted);
+  }
+
+  .note {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 0.4em;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav>
+      <a href="/">Prince</a>
+      <a href="#">Writing</a>
+      <a href="#">Now</a>
+    </nav>
+
+    <h1>Hi, I'm Prince.</h1>
+
+    <p>
+      I'm studying Applied Quantitative Analytics at Columbia, where I hold
+      a Dean's Fellowship. Before this, I spent time across data science,
+      product management, and program management &mdash; most recently helping
+      run <a href="#">Foundervine</a>, a UK-based startup accelerator, where
+      I supported over 300 founders through capital raises.
+    </p>
+
+    <p>
+      I grew up in Ghana and have since lived in Seattle and now New York,
+      where I'm based today. Along the way I founded a small digital skills
+      incubator that trained hundreds of young people in technical fields,
+      which is probably the work I'm proudest of.
+    </p>
+
+    <p>
+      These days I think a lot about quantitative finance, AI safety, and
+      how technology can lower the barriers for early-stage builders &mdash;
+      especially in African contexts. Longer term, I'm working toward
+      building a fund for technical student founders.
+    </p>
+
+    <p>
+      My favorite color is <a class="warm-link" href="#">[your color]</a>
+      and I'm currently reading <a class="warm-link" href="#">[a book you like]</a>.
+    </p>
+
+    <hr class="divider">
+
+    <footer>
+      <a href="#">X</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Email</a>
+    </footer>
+
+  </div>
+</body>
+</html>
