@@ -123,9 +123,33 @@
     color: var(--muted);
     margin-top: 0.4em;
   }
+
+  .wrap { position: relative; z-index: 1; }
+
+  #globe {
+    position: fixed;
+    top: 50%;
+    right: clamp(16px, 5vw, 96px);
+    transform: translateY(-50%);
+    width: 420px;
+    height: 420px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.62;
+  }
+
+  @media (max-width: 1200px) {
+    #globe { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #globe { opacity: 0.5; }
+  }
 </style>
 </head>
 <body>
+  <canvas id="globe" aria-hidden="true"></canvas>
+
   <div class="wrap">
 
     <nav>
@@ -172,5 +196,109 @@
     </footer>
 
   </div>
+
+  <script>
+  (function () {
+    var canvas = document.getElementById("globe");
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+
+    var GREY = "74, 74, 74";            // deep grey
+    var NODES = 92;
+    var LINK_DIST = 0.62;               // max chord length (unit sphere) to draw a link
+    var TILT = 0.42;                    // fixed x-axis lean, radians
+    var SPIN = 0.0016;                  // y-axis rotation per frame
+    var reduce = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var pts = [], edges = [], angle = 0, w = 0, h = 0, radius = 0, raf = 0;
+
+    // Fibonacci sphere
+    for (var i = 0; i < NODES; i++) {
+      var y = 1 - (i / (NODES - 1)) * 2;
+      var r = Math.sqrt(1 - y * y);
+      var t = i * Math.PI * (3 - Math.sqrt(5));
+      pts.push({ x: Math.cos(t) * r, y: y, z: Math.sin(t) * r });
+    }
+    for (var a = 0; a < NODES; a++) {
+      for (var b = a + 1; b < NODES; b++) {
+        var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y, dz = pts[a].z - pts[b].z;
+        if (Math.sqrt(dx * dx + dy * dy + dz * dz) < LINK_DIST) edges.push([a, b]);
+      }
+    }
+
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      radius = Math.min(w, h) * 0.46;
+    }
+
+    function frame() {
+      var cx = w / 2, cy = h / 2;
+      var cosT = Math.cos(TILT), sinT = Math.sin(TILT);
+      var cosA = Math.cos(angle), sinA = Math.sin(angle);
+      var proj = [];
+
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        var x1 = p.x * cosA + p.z * sinA;
+        var z1 = -p.x * sinA + p.z * cosA;
+        var y2 = p.y * cosT - z1 * sinT;
+        var z2 = p.y * sinT + z1 * cosT;
+        var scale = 1 / (1.9 - z2 * 0.55);      // gentle perspective
+        proj.push({
+          sx: cx + x1 * radius * scale,
+          sy: cy - y2 * radius * scale,
+          depth: (z2 + 1) / 2                    // 0 back .. 1 front
+        });
+      }
+
+      ctx.clearRect(0, 0, w, h);
+
+      for (var e = 0; e < edges.length; e++) {
+        var pa = proj[edges[e][0]], pb = proj[edges[e][1]];
+        var d = (pa.depth + pb.depth) / 2;
+        ctx.strokeStyle = "rgba(" + GREY + "," + (0.04 + d * d * 0.24).toFixed(3) + ")";
+        ctx.lineWidth = 0.6 + d * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(pa.sx, pa.sy);
+        ctx.lineTo(pb.sx, pb.sy);
+        ctx.stroke();
+      }
+
+      for (var n = 0; n < proj.length; n++) {
+        var q = proj[n];
+        ctx.fillStyle = "rgba(" + GREY + "," + (0.16 + q.depth * 0.7).toFixed(3) + ")";
+        ctx.beginPath();
+        ctx.arc(q.sx, q.sy, 0.9 + q.depth * 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function loop() {
+      angle += SPIN;
+      frame();
+      raf = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      cancelAnimationFrame(raf);
+      resize();
+      if (reduce) { frame(); return; }
+      raf = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("resize", start);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else if (!reduce) { raf = requestAnimationFrame(loop); }
+    });
+    start();
+  })();
+  </script>
 </body>
 </html>
