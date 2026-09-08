@@ -60,9 +60,15 @@
     border-bottom-color: var(--muted);
   }
 
-  nav a:active {
+  /* Stay darkened after a click/tap (focus persists) and for the
+     current page. */
+  nav a:active,
+  nav a:focus,
+  nav a:focus-visible,
+  nav a[aria-current="page"] {
     color: #3f3f3a;
     border-bottom-color: #3f3f3a;
+    outline: none;
   }
 
   h1 {
@@ -168,7 +174,7 @@
   <div class="wrap">
 
     <nav>
-      <a href="/">Prince</a>
+      <a href="/" aria-current="page">Prince</a>
       <a href="#">Writing</a>
       <a href="#">Now</a>
     </nav>
