@@ -138,8 +138,18 @@
     opacity: 0.62;
   }
 
+  /* Narrow screens: no room beside the column, so center it behind
+     the text as faint ambient texture. */
   @media (max-width: 1200px) {
-    #globe { display: none; }
+    #globe {
+      top: 50%;
+      left: 50%;
+      right: auto;
+      transform: translate(-50%, -50%);
+      width: min(88vw, 460px);
+      height: min(88vw, 460px);
+      opacity: 0.22;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
