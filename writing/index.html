@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing — Prince</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --ink: #1c1d1b;
+    --muted: #6b6d68;
+    --accent: #2b3a67;
+    --accent-warm: #a9793e;
+    --rule: #e3e1d9;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: #63635b;
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 14vh 24px 10vh;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 10vh 20px 8vh; }
+    body { font-size: 16px; }
+  }
+
+  nav {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 3.2em;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    margin-right: 1.4em;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--muted);
+  }
+
+  nav a:active,
+  nav a:focus,
+  nav a:focus-visible,
+  nav a[aria-current="page"] {
+    color: #3f3f3a;
+    border-bottom-color: #3f3f3a;
+    font-weight: 700;
+    outline: none;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    font-weight: 400;
+    margin: 0 0 0.15em;
+    letter-spacing: 0.2px;
+  }
+
+  .tagline {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 2em;
+  }
+
+  p {
+    margin: 0 0 1.3em;
+    max-width: 34em;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration-color: rgba(43, 58, 103, 0.35);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease, color 0.15s ease;
+  }
+
+  a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    border: none;
+    margin: 2.6em 0;
+  }
+
+  /* Collections ------------------------------------------------ */
+
+  .collection-title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: var(--muted);
+    margin: 3em 0 0.2em;
+    padding-bottom: 0.6em;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .piece {
+    display: flex;
+    gap: 1.5em;
+    padding: 2.2em 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .piece:last-child { border-bottom: none; }
+
+  .cover {
+    flex: 0 0 84px;
+    height: 120px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 9px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 1px 3px rgba(28, 29, 27, 0.14);
+  }
+
+  .piece-body { flex: 1; min-width: 0; }
+
+  .piece-body h2 {
+    font-size: 1.1em;
+    font-weight: 400;
+    margin: 0 0 0.1em;
+    color: var(--ink);
+  }
+
+  .piece-body h2 a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .piece-body h2 a:hover { border-bottom-color: var(--muted); }
+
+  .byline {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 0 0 0.7em;
+  }
+
+  .piece-body p {
+    margin: 0 0 0.8em;
+    font-size: 0.95em;
+  }
+
+  .buy {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+  }
+
+  .buy a {
+    color: var(--muted);
+    margin-right: 0.9em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .buy a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .piece { gap: 1.1em; }
+    .cover { flex-basis: 66px; height: 96px; font-size: 8.5px; padding: 9px 7px; }
+  }
+
+  .colophon {
+    font-size: 0.95em;
+  }
+
+  footer {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--muted);
+    margin-right: 1.2em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  footer a:hover {
+    color: var(--ink);
+    border-bottom-color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav>
+      <a href="/">Prince</a>
+      <a href="/writing" aria-current="page">Writing</a>
+      <a href="#">Now</a>
+    </nav>
+
+    <h1>Writing</h1>
+    <p class="tagline">Ideas for progress.</p>
+
+    <p>
+      Essays and long-form notes on the things I keep coming back to &mdash;
+      quantitative finance, self-improving AI, and how technology lowers the
+      barriers for early-stage builders. I write mostly to think these ideas
+      through, and publish the ones I believe can be broadly useful.
+    </p>
+
+    <!-- Placeholder entries — swap in the real pieces later. -->
+
+    <div class="collection-title">Books</div>
+
+    <div class="piece">
+      <div class="cover" style="background: #2b3a67;">The Distribution Problem</div>
+      <div class="piece-body">
+        <h2><a href="#">The Distribution Problem</a></h2>
+        <p class="byline">Prince Newman &middot; 2026</p>
+        <p>
+          A placeholder description. Why the hardest part of building in
+          frontier markets is rarely the product, and almost always getting
+          it in front of the people who need it. Draws on time spent helping
+          founders raise capital and enter new markets.
+        </p>
+        <p class="buy">
+          <a href="#">Read</a>
+          <a href="#">PDF</a>
+          <a href="#">Notes</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="piece">
+      <div class="cover" style="background: #45543f;">Self-Improving Systems</div>
+      <div class="piece-body">
+        <h2><a href="#">Self-Improving Systems</a></h2>
+        <p class="byline">Prince Newman &middot; 2026</p>
+        <p>
+          A placeholder description. Notes toward understanding what changes
+          when the systems we build start improving themselves &mdash; and
+          which of our institutions are ready for that and which are not.
+        </p>
+        <p class="buy">
+          <a href="#">Read</a>
+          <a href="#">PDF</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="piece">
+      <div class="cover" style="background: #6b4a2e;">Abundance Through Industry</div>
+      <div class="piece-body">
+        <h2><a href="#">Abundance Through Industry</a></h2>
+        <p class="byline">Prince Newman &middot; 2025</p>
+        <p>
+          A placeholder description. An argument that sustainable abundance is
+          built, not discovered &mdash; and a look at the industrial capacity
+          that has to exist underneath any story about growth.
+        </p>
+        <p class="buy">
+          <a href="#">Read</a>
+          <a href="#">PDF</a>
+          <a href="#">Notes</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="piece">
+      <div class="cover" style="background: #3f4a52;">Notes on Quant</div>
+      <div class="piece-body">
+        <h2><a href="#">Notes on Quant</a></h2>
+        <p class="byline">Prince Newman &middot; 2025</p>
+        <p>
+          A placeholder description. A running collection of shorter pieces on
+          quantitative finance &mdash; models that held up, models that did
+          not, and what the difference tends to be.
+        </p>
+        <p class="buy">
+          <a href="#">Read</a>
+          <a href="#">PDF</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="piece">
+      <div class="cover" style="background: #5a3f52;">Barriers</div>
+      <div class="piece-body">
+        <h2><a href="#">Barriers</a></h2>
+        <p class="byline">Prince Newman &middot; 2024</p>
+        <p>
+          A placeholder description. Collected essays on the specific,
+          unglamorous obstacles that sit between a capable founder and their
+          first real traction, with examples from African contexts.
+        </p>
+        <p class="buy">
+          <a href="#">Read</a>
+          <a href="#">PDF</a>
+          <a href="#">Notes</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="collection-title">Elsewhere</div>
+
+    <div class="piece">
+      <div class="cover" style="background: #2f4f4a;">On Building Havana</div>
+      <div class="piece-body">
+        <h2><a href="#">On Building Havana</a></h2>
+        <p class="byline">Conversation &middot; 2026</p>
+        <p>
+          A placeholder entry for talks, interviews, and podcast appearances.
+          This one is a long conversation about market access and distribution
+          and what a &ldquo;Clay for market entry&rdquo; actually looks like.
+        </p>
+        <p class="buy">
+          <a href="#">Listen</a>
+          <a href="#">Transcript</a>
+        </p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <p class="colophon">
+      New pieces land here first. To get an email when I publish something,
+      <a href="mailto:pa2785@columbia.edu?subject=Subscribe%20to%20writing">let me know</a>.
+    </p>
+
+    <footer>
+      <a href="https://x.com/PrinceNewmann" target="_blank" rel="noopener">X</a>
+      <a href="https://www.linkedin.com/in/princenewmann/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:pa2785@columbia.edu">Email</a>
+    </footer>
+
+  </div>
+</body>
+</html>
