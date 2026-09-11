@@ -86,22 +86,21 @@
 
   a {
     color: var(--accent);
-    text-decoration-color: rgba(43, 58, 103, 0.35);
-    text-underline-offset: 2px;
-    transition: text-decoration-color 0.15s ease, color 0.15s ease;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   a:hover {
-    text-decoration-color: var(--accent);
+    background-color: rgba(43, 58, 103, 0.12);
   }
 
   .warm-link {
     color: var(--accent-warm);
-    text-decoration-color: rgba(169, 121, 62, 0.4);
   }
 
   .warm-link:hover {
-    text-decoration-color: var(--accent-warm);
+    background-color: rgba(169, 121, 62, 0.15);
   }
 
   .divider {
