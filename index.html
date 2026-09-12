@@ -103,6 +103,78 @@
     background-color: rgba(169, 121, 62, 0.15);
   }
 
+  /* "Clay" inline disclosure ------------------------------------ */
+
+  .inline-toggle {
+    appearance: none;
+    font: inherit;
+    color: var(--accent);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 2px;
+    vertical-align: baseline;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .inline-toggle:hover,
+  .inline-toggle[aria-expanded="true"] {
+    background-color: rgba(43, 58, 103, 0.12);
+  }
+
+  .inline-toggle::after {
+    content: "";
+    display: inline-block;
+    margin-left: 0.35em;
+    vertical-align: middle;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: 0.55;
+    transition: transform 0.25s ease;
+  }
+
+  .inline-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg);
+  }
+
+  .clay-detail {
+    grid-template-rows: 0fr;
+    margin: 0;
+    transition: grid-template-rows 0.32s ease, margin 0.32s ease;
+  }
+
+  .clay-detail:not([hidden]) {
+    display: grid;
+  }
+
+  .clay-detail.open {
+    grid-template-rows: 1fr;
+    margin: 0.4em 0 1.3em;
+  }
+
+  .clay-detail-inner {
+    overflow: hidden;
+  }
+
+  .clay-detail-text {
+    color: #8a8a82;
+    margin: 0 0 1em;
+  }
+
+  .clay-detail-text:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .clay-detail,
+    .inline-toggle::after {
+      transition: none;
+    }
+  }
+
   .divider {
     height: 1px;
     background: var(--rule);
@@ -191,8 +263,30 @@
     <p>
       While at this, I'm building
       <a href="https://joinhavana.com" target="_blank" rel="noopener" style="color: #002FA7">Havana</a> in New York City &mdash; think
-      <a href="https://www.capitalg.com/insights/clay-the-go-to-market-platform-for-the-ai-era/" target="_blank" rel="noopener">Clay</a>, but for market access and distribution.
+      <button type="button" id="clay-toggle" class="inline-toggle" aria-expanded="false" aria-controls="clay-detail">Clay</button>, but for market access and distribution.
     </p>
+
+    <div id="clay-detail" class="clay-detail" role="region" aria-labelledby="clay-toggle" hidden>
+      <div class="clay-detail-inner">
+        <p class="clay-detail-text">
+          Clay solves the fragmented data problem for B2B growth teams. It
+          brings together the data, enrichment, research, and outreach tools
+          businesses need to identify and reach potential customers. But
+          knowing where customers are is only the beginning of entering a
+          market. Businesses still have to understand the market, find the
+          communities and people that can give them access, build
+          relationships, choose the right distribution channels, execute
+          their strategy, and learn what works.
+        </p>
+        <p class="clay-detail-text">
+          Havana is building the GTM infrastructure that learns how markets
+          open. We want to make market entry and distribution programmable by
+          mapping the paths into a market, helping businesses execute those
+          paths, measuring what happens, and learning from every market they
+          enter to make the next one possible.
+        </p>
+      </div>
+    </div>
 
     <hr class="divider">
 
@@ -305,6 +399,50 @@
       else if (!reduce) { raf = requestAnimationFrame(loop); }
     });
     start();
+  })();
+  </script>
+
+  <script>
+  (function () {
+    var btn = document.getElementById("clay-toggle");
+    var panel = document.getElementById("clay-detail");
+    if (!btn || !panel) return;
+
+    var reduce = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var hideOnEnd = null;
+
+    function expand() {
+      if (hideOnEnd) {
+        panel.removeEventListener("transitionend", hideOnEnd);
+        hideOnEnd = null;
+      }
+      panel.hidden = false;
+      void panel.offsetHeight; // force reflow so the 0fr->1fr transition runs
+      btn.setAttribute("aria-expanded", "true");
+      panel.classList.add("open");
+    }
+
+    function collapse() {
+      btn.setAttribute("aria-expanded", "false");
+      panel.classList.remove("open");
+      if (reduce) {
+        panel.hidden = true;
+        return;
+      }
+      hideOnEnd = function (e) {
+        if (e.target === panel && e.propertyName === "grid-template-rows") {
+          panel.hidden = true;
+          hideOnEnd = null;
+        }
+      };
+      panel.addEventListener("transitionend", hideOnEnd, { once: true });
+    }
+
+    btn.addEventListener("click", function () {
+      if (btn.getAttribute("aria-expanded") === "true") collapse();
+      else expand();
+    });
   })();
   </script>
 </body>
