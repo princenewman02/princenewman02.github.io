@@ -103,7 +103,7 @@
     background-color: rgba(169, 121, 62, 0.15);
   }
 
-  /* "Clay" inline disclosure ------------------------------------ */
+  /* Inline disclosures ("Havana", "Clay") ------------------------ */
 
   .inline-toggle {
     appearance: none;
@@ -140,36 +140,41 @@
     transform: rotate(180deg);
   }
 
-  .clay-detail {
+  .disclosure {
     grid-template-rows: 0fr;
     margin: 0;
     transition: grid-template-rows 0.32s ease, margin 0.32s ease;
   }
 
-  .clay-detail:not([hidden]) {
+  .disclosure:not([hidden]) {
     display: grid;
   }
 
-  .clay-detail.open {
+  .disclosure.open {
     grid-template-rows: 1fr;
     margin: 0.4em 0 1.3em;
   }
 
-  .clay-detail-inner {
+  .disclosure-inner {
     overflow: hidden;
   }
 
-  .clay-detail-text {
+  .disclosure-text {
     color: #8a8a82;
     margin: 0 0 1em;
   }
 
-  .clay-detail-text:last-child {
+  .disclosure-text:last-child {
     margin-bottom: 0;
   }
 
+  .disclosure-headline {
+    font-weight: 700;
+    font-size: 1.08em;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .clay-detail,
+    .disclosure,
     .inline-toggle::after {
       transition: none;
     }
@@ -262,13 +267,67 @@
 
     <p>
       While at this, I'm building
-      <a href="https://joinhavana.com" target="_blank" rel="noopener" style="color: #002FA7">Havana</a> in New York City &mdash; think
+      <button type="button" id="havana-toggle" class="inline-toggle" style="color: #002FA7" aria-expanded="false" aria-controls="havana-detail">Havana</button> in New York City &mdash; think
       <button type="button" id="clay-toggle" class="inline-toggle" aria-expanded="false" aria-controls="clay-detail">Clay</button>, but for market access and distribution.
     </p>
 
-    <div id="clay-detail" class="clay-detail" role="region" aria-labelledby="clay-toggle" hidden>
-      <div class="clay-detail-inner">
-        <p class="clay-detail-text">
+    <div id="havana-detail" class="disclosure" role="region" aria-labelledby="havana-toggle" hidden>
+      <div class="disclosure-inner">
+        <p class="disclosure-text disclosure-headline">GTM infrastructure that learns how markets open</p>
+        <p class="disclosure-text">
+          Trade is what makes us human. Adam Smith argues that Humans have an
+          &ldquo;innate propensity to truck, barter, and exchange&rdquo;; a
+          propensity that only humans have, and essentially the greatest
+          force behind human economic progress. From ports and roads to
+          railways, electricity, shipping networks, banks, and the internet,
+          each generation has built new infrastructure that made it easier
+          for people, goods, ideas, and businesses to move between markets.
+        </p>
+        <p class="disclosure-text">
+          Today, machines are becoming participants in this process too.
+          This is such an exciting time in the history of human
+          civilisation. Machines are now much more capable of searching
+          across enormous amounts of information, understand relationships
+          between people and organizations, reason about unfamiliar markets,
+          and carry work forward on their own. We think this creates a new
+          opportunity: to build systems beyond helping businesses find
+          markets, also understand and navigate them. Havana exists to build
+          the GTM infrastructure that learns how markets open. We&rsquo;re
+          starting with how businesses enter new markets.
+        </p>
+        <p class="disclosure-text">
+          Breakthrough technology has made it possible to make market entry
+          and distribution programmable. We are now much more capable of
+          mapping markets and the relationships within them, finding the
+          paths that can open them, helping businesses execute those paths,
+          measuring what happens, and learning from every market they enter.
+        </p>
+        <p class="disclosure-text">
+          We are inspired by designers, archaeologists, geographers,
+          mathematicians, architects, and the places and systems they study.
+          Each gives us a different way of thinking about how people,
+          places, networks, and economies connect. This is part of why we
+          are named after Havana, whose geography made it a major gateway in
+          the history of global trade as &ldquo;the key to the new
+          world&rdquo;.
+        </p>
+        <p class="disclosure-text">
+          That idea of a gateway is important to us for human capability as
+          machines become more capable, and we think we can use AI to help
+          make it possible to understand a market, see the relationships
+          within it, identify the paths through which products can spread,
+          and help a business take those paths easily, quickly and smartly.
+        </p>
+        <p class="disclosure-text">
+          This is hard to achieve, and we believe there has never been a
+          better time to build this.
+        </p>
+      </div>
+    </div>
+
+    <div id="clay-detail" class="disclosure" role="region" aria-labelledby="clay-toggle" hidden>
+      <div class="disclosure-inner">
+        <p class="disclosure-text">
           Clay solves the fragmented data problem for B2B growth teams. It
           brings together the data, enrichment, research, and outreach tools
           businesses need to identify and reach potential customers. But
@@ -278,7 +337,7 @@
           relationships, choose the right distribution channels, execute
           their strategy, and learn what works.
         </p>
-        <p class="clay-detail-text">
+        <p class="disclosure-text">
           Havana is building the GTM infrastructure that learns how markets
           open. We want to make market entry and distribution programmable by
           mapping the paths into a market, helping businesses execute those
@@ -404,45 +463,54 @@
 
   <script>
   (function () {
-    var btn = document.getElementById("clay-toggle");
-    var panel = document.getElementById("clay-detail");
-    if (!btn || !panel) return;
-
     var reduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var hideOnEnd = null;
 
-    function expand() {
-      if (hideOnEnd) {
-        panel.removeEventListener("transitionend", hideOnEnd);
-        hideOnEnd = null;
-      }
-      panel.hidden = false;
-      void panel.offsetHeight; // force reflow so the 0fr->1fr transition runs
-      btn.setAttribute("aria-expanded", "true");
-      panel.classList.add("open");
-    }
+    // Wires an inline-toggle button up to its disclosure panel. Shared by
+    // every "Havana"/"Clay"-style expandable in the prose; each pair gets
+    // its own independent open/close state.
+    function initDisclosure(btnId, panelId) {
+      var btn = document.getElementById(btnId);
+      var panel = document.getElementById(panelId);
+      if (!btn || !panel) return;
 
-    function collapse() {
-      btn.setAttribute("aria-expanded", "false");
-      panel.classList.remove("open");
-      if (reduce) {
-        panel.hidden = true;
-        return;
-      }
-      hideOnEnd = function (e) {
-        if (e.target === panel && e.propertyName === "grid-template-rows") {
-          panel.hidden = true;
+      var hideOnEnd = null;
+
+      function expand() {
+        if (hideOnEnd) {
+          panel.removeEventListener("transitionend", hideOnEnd);
           hideOnEnd = null;
         }
-      };
-      panel.addEventListener("transitionend", hideOnEnd, { once: true });
+        panel.hidden = false;
+        void panel.offsetHeight; // force reflow so the 0fr->1fr transition runs
+        btn.setAttribute("aria-expanded", "true");
+        panel.classList.add("open");
+      }
+
+      function collapse() {
+        btn.setAttribute("aria-expanded", "false");
+        panel.classList.remove("open");
+        if (reduce) {
+          panel.hidden = true;
+          return;
+        }
+        hideOnEnd = function (e) {
+          if (e.target === panel && e.propertyName === "grid-template-rows") {
+            panel.hidden = true;
+            hideOnEnd = null;
+          }
+        };
+        panel.addEventListener("transitionend", hideOnEnd, { once: true });
+      }
+
+      btn.addEventListener("click", function () {
+        if (btn.getAttribute("aria-expanded") === "true") collapse();
+        else expand();
+      });
     }
 
-    btn.addEventListener("click", function () {
-      if (btn.getAttribute("aria-expanded") === "true") collapse();
-      else expand();
-    });
+    initDisclosure("havana-toggle", "havana-detail");
+    initDisclosure("clay-toggle", "clay-detail");
   })();
   </script>
 </body>
