@@ -173,6 +173,14 @@
     font-size: 1.08em;
   }
 
+  .disclosure-callout {
+    font-family: Helvetica, Arial, sans-serif;
+    color: #262626;
+    border-left: 2px solid #9ca3af;
+    padding: 4px 0 4px 16px;
+    margin: 12px 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .disclosure,
     .inline-toggle::after {
@@ -291,9 +299,13 @@
           between people and organizations, reason about unfamiliar markets,
           and carry work forward on their own. We think this creates a new
           opportunity: to build systems beyond helping businesses find
-          markets, also understand and navigate them. Havana exists to build
-          the GTM infrastructure that learns how markets open. We&rsquo;re
-          starting with how businesses enter new markets.
+          markets, also understand and navigate them.
+        </p>
+        <p class="disclosure-callout">
+          Havana exists to build the GTM infrastructure that learns how
+          markets open. We&rsquo;re starting with how businesses enter new
+          markets, with the goal of massively reducing the time and effort
+          it takes to bring a product to market.
         </p>
         <p class="disclosure-text">
           Breakthrough technology has made it possible to make market entry
@@ -466,9 +478,12 @@
     var reduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Every registered disclosure, so opening one can close the others
+    // (accordion behavior: only one of "Havana"/"Clay" open at a time).
+    var disclosures = [];
+
     // Wires an inline-toggle button up to its disclosure panel. Shared by
-    // every "Havana"/"Clay"-style expandable in the prose; each pair gets
-    // its own independent open/close state.
+    // every "Havana"/"Clay"-style expandable in the prose.
     function initDisclosure(btnId, panelId) {
       var btn = document.getElementById(btnId);
       var panel = document.getElementById(panelId);
@@ -503,8 +518,17 @@
         panel.addEventListener("transitionend", hideOnEnd, { once: true });
       }
 
+      var entry = { btn: btn, collapse: collapse };
+      disclosures.push(entry);
+
       btn.addEventListener("click", function () {
-        if (btn.getAttribute("aria-expanded") === "true") collapse();
+        var isOpen = btn.getAttribute("aria-expanded") === "true";
+        disclosures.forEach(function (other) {
+          if (other !== entry && other.btn.getAttribute("aria-expanded") === "true") {
+            other.collapse();
+          }
+        });
+        if (isOpen) collapse();
         else expand();
       });
     }
