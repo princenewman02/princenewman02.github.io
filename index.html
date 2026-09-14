@@ -181,29 +181,47 @@
     margin: 12px 0;
   }
 
-  .disclosure-media {
-    margin: 0 0 1em;
+  .disclosure-image-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 0 0.6em;
   }
 
-  .disclosure-media:last-child {
-    margin-bottom: 0;
+  .disclosure-photo {
+    display: block;
+    width: 140px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(28, 29, 27, 0.18);
   }
 
   .disclosure-portrait {
     display: inline-block;
-  }
-
-  .disclosure-portrait img {
-    display: block;
-    width: 160px;
-    height: auto;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(28, 29, 27, 0.18);
     transition: opacity 0.15s ease;
   }
 
-  .disclosure-portrait:hover img {
+  .disclosure-portrait:hover {
     opacity: 0.85;
+  }
+
+  .disclosure-caption {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-align: center;
+    margin: 0 0 1em;
+  }
+
+  /* Hover-triggered disclosure ("Adam Smith") -------------------- */
+
+  .hover-toggle {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-decoration-color: var(--muted);
+    text-underline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -309,8 +327,8 @@
         <p class="disclosure-text disclosure-headline">GTM infrastructure that learns how markets open</p>
         <p class="disclosure-text">
           Trade is what makes us human.
-          <button type="button" id="adamsmith-toggle" class="inline-toggle" aria-expanded="false" aria-controls="adamsmith-detail">Adam Smith</button>
-          argues that Humans have an
+          <span id="adamsmith-toggle" class="hover-toggle" tabindex="0" aria-expanded="false" aria-controls="adamsmith-detail">Adam Smith argues in the &ldquo;Wealth of Nations&rdquo;</span>
+          that Humans have an
           &ldquo;innate propensity to truck, barter, and exchange&rdquo;; a
           propensity that only humans have, and essentially the greatest
           force behind human economic progress. From ports and roads to
@@ -321,11 +339,13 @@
 
         <div id="adamsmith-detail" class="disclosure" role="region" aria-labelledby="adamsmith-toggle" hidden>
           <div class="disclosure-inner">
-            <p class="disclosure-media">
+            <div class="disclosure-image-row">
+              <img class="disclosure-photo" src="/images/adam-smith.jpg" alt="Portrait of Adam Smith" width="140" height="135">
               <a href="https://www.amazon.com/dp/B001QUD366?lv=shuf&amp;channelId=500&amp;plpRedirect=mhFallback" target="_blank" rel="noopener" class="disclosure-portrait">
-                <img src="/images/adam-smith.jpg" alt="Portrait of Adam Smith" width="160" height="155">
+                <img class="disclosure-photo" src="/images/wealth-of-nations.jpg" alt="Title page of An Inquiry into the Nature and Causes of the Wealth of Nations" width="140" height="241">
               </a>
-            </p>
+            </div>
+            <p class="disclosure-caption">Image left: Adam Smith. Image right: Wealth of Nations book.</p>
           </div>
         </div>
         <p class="disclosure-text">
@@ -578,7 +598,60 @@
 
     initDisclosure("havana-toggle", "havana-detail");
     initDisclosure("clay-toggle", "clay-detail");
-    initDisclosure("adamsmith-toggle", "adamsmith-detail", { exclusive: false });
+
+    // "Adam Smith" opens on hover/focus rather than click, so it needs its
+    // own wiring: expand immediately, but debounce the collapse so moving
+    // the pointer from the trigger into the panel doesn't flicker it shut.
+    function initHoverDisclosure(triggerId, panelId) {
+      var trigger = document.getElementById(triggerId);
+      var panel = document.getElementById(panelId);
+      if (!trigger || !panel) return;
+
+      var hideTimer = null;
+      var hideOnEnd = null;
+
+      function expand() {
+        clearTimeout(hideTimer);
+        if (hideOnEnd) {
+          panel.removeEventListener("transitionend", hideOnEnd);
+          hideOnEnd = null;
+        }
+        panel.hidden = false;
+        void panel.offsetHeight;
+        trigger.setAttribute("aria-expanded", "true");
+        panel.classList.add("open");
+      }
+
+      function collapseNow() {
+        trigger.setAttribute("aria-expanded", "false");
+        panel.classList.remove("open");
+        if (reduce) {
+          panel.hidden = true;
+          return;
+        }
+        hideOnEnd = function (e) {
+          if (e.target === panel && e.propertyName === "grid-template-rows") {
+            panel.hidden = true;
+            hideOnEnd = null;
+          }
+        };
+        panel.addEventListener("transitionend", hideOnEnd, { once: true });
+      }
+
+      function scheduleCollapse() {
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(collapseNow, 150);
+      }
+
+      trigger.addEventListener("mouseenter", expand);
+      trigger.addEventListener("mouseleave", scheduleCollapse);
+      trigger.addEventListener("focus", expand);
+      trigger.addEventListener("blur", scheduleCollapse);
+      panel.addEventListener("mouseenter", function () { clearTimeout(hideTimer); });
+      panel.addEventListener("mouseleave", scheduleCollapse);
+    }
+
+    initHoverDisclosure("adamsmith-toggle", "adamsmith-detail");
   })();
   </script>
 </body>
