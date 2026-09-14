@@ -442,6 +442,14 @@
     var reduce = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Cursor-follow: hovering nudges yaw/pitch on top of the idle spin,
+    // eased in and out each frame so there's no snap on enter or leave.
+    var HOVER_MAX_YAW = 0.5;    // max extra yaw at full cursor deflection (rad)
+    var HOVER_MAX_PITCH = 0.3;  // max extra pitch at full cursor deflection (rad)
+    var HOVER_EASE = 0.08;      // per-frame interpolation toward the target
+    var targetYaw = 0, targetPitch = 0;
+    var curYaw = 0, curPitch = 0;
+
     var pts = [], edges = [], angle = 0, w = 0, h = 0, radius = 0, raf = 0;
 
     // Fibonacci sphere
@@ -469,9 +477,12 @@
     }
 
     function frame() {
+      curYaw += (targetYaw - curYaw) * HOVER_EASE;
+      curPitch += (targetPitch - curPitch) * HOVER_EASE;
+
       var cx = w / 2, cy = h / 2;
-      var cosT = Math.cos(TILT), sinT = Math.sin(TILT);
-      var cosA = Math.cos(angle), sinA = Math.sin(angle);
+      var cosT = Math.cos(TILT + curPitch), sinT = Math.sin(TILT + curPitch);
+      var cosA = Math.cos(angle + curYaw), sinA = Math.sin(angle + curYaw);
       var proj = [];
 
       for (var i = 0; i < pts.length; i++) {
@@ -528,6 +539,33 @@
       if (document.hidden) cancelAnimationFrame(raf);
       else if (!reduce) { raf = requestAnimationFrame(loop); }
     });
+
+    // Cursor tracking is skipped entirely for prefers-reduced-motion; the
+    // math itself lives in frame(), inside the existing rAF loop, so this
+    // listener only ever writes two numbers (no per-move redraw/reflow).
+    if (!reduce) {
+      var releasePointer = function () {
+        targetYaw = 0;
+        targetPitch = 0;
+      };
+
+      window.addEventListener("mousemove", function (e) {
+        var rect = canvas.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+        var within = e.clientX >= rect.left && e.clientX <= rect.right &&
+          e.clientY >= rect.top && e.clientY <= rect.bottom;
+        if (!within) { releasePointer(); return; }
+        var nx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+        var ny = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+        targetYaw = Math.max(-1, Math.min(1, nx)) * HOVER_MAX_YAW;
+        targetPitch = Math.max(-1, Math.min(1, ny)) * HOVER_MAX_PITCH;
+      }, { passive: true });
+
+      // Cursor leaving the browser viewport entirely (mousemove stops
+      // firing) still needs to release back to idle rotation.
+      document.documentElement.addEventListener("mouseleave", releasePointer);
+    }
+
     start();
   })();
   </script>
