@@ -181,6 +181,31 @@
     margin: 12px 0;
   }
 
+  .disclosure-media {
+    margin: 0 0 1em;
+  }
+
+  .disclosure-media:last-child {
+    margin-bottom: 0;
+  }
+
+  .disclosure-portrait {
+    display: inline-block;
+  }
+
+  .disclosure-portrait img {
+    display: block;
+    width: 160px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(28, 29, 27, 0.18);
+    transition: opacity 0.15s ease;
+  }
+
+  .disclosure-portrait:hover img {
+    opacity: 0.85;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .disclosure,
     .inline-toggle::after {
@@ -283,7 +308,9 @@
       <div class="disclosure-inner">
         <p class="disclosure-text disclosure-headline">GTM infrastructure that learns how markets open</p>
         <p class="disclosure-text">
-          Trade is what makes us human. Adam Smith argues that Humans have an
+          Trade is what makes us human.
+          <button type="button" id="adamsmith-toggle" class="inline-toggle" aria-expanded="false" aria-controls="adamsmith-detail">Adam Smith</button>
+          argues that Humans have an
           &ldquo;innate propensity to truck, barter, and exchange&rdquo;; a
           propensity that only humans have, and essentially the greatest
           force behind human economic progress. From ports and roads to
@@ -291,6 +318,16 @@
           each generation has built new infrastructure that made it easier
           for people, goods, ideas, and businesses to move between markets.
         </p>
+
+        <div id="adamsmith-detail" class="disclosure" role="region" aria-labelledby="adamsmith-toggle" hidden>
+          <div class="disclosure-inner">
+            <p class="disclosure-media">
+              <a href="https://www.amazon.com/dp/B001QUD366?lv=shuf&amp;channelId=500&amp;plpRedirect=mhFallback" target="_blank" rel="noopener" class="disclosure-portrait">
+                <img src="/images/adam-smith.jpg" alt="Portrait of Adam Smith" width="160" height="155">
+              </a>
+            </p>
+          </div>
+        </div>
         <p class="disclosure-text">
           Today, machines are becoming participants in this process too.
           This is such an exciting time in the history of human
@@ -483,11 +520,15 @@
     var disclosures = [];
 
     // Wires an inline-toggle button up to its disclosure panel. Shared by
-    // every "Havana"/"Clay"-style expandable in the prose.
-    function initDisclosure(btnId, panelId) {
+    // every "Havana"/"Clay"-style expandable in the prose. Pass
+    // { exclusive: false } for a toggle nested inside another disclosure
+    // (e.g. "Adam Smith" inside the Havana panel) so it doesn't join the
+    // top-level accordion group.
+    function initDisclosure(btnId, panelId, opts) {
       var btn = document.getElementById(btnId);
       var panel = document.getElementById(panelId);
       if (!btn || !panel) return;
+      var exclusive = !opts || opts.exclusive !== false;
 
       var hideOnEnd = null;
 
@@ -519,15 +560,17 @@
       }
 
       var entry = { btn: btn, collapse: collapse };
-      disclosures.push(entry);
+      if (exclusive) disclosures.push(entry);
 
       btn.addEventListener("click", function () {
         var isOpen = btn.getAttribute("aria-expanded") === "true";
-        disclosures.forEach(function (other) {
-          if (other !== entry && other.btn.getAttribute("aria-expanded") === "true") {
-            other.collapse();
-          }
-        });
+        if (exclusive) {
+          disclosures.forEach(function (other) {
+            if (other !== entry && other.btn.getAttribute("aria-expanded") === "true") {
+              other.collapse();
+            }
+          });
+        }
         if (isOpen) collapse();
         else expand();
       });
@@ -535,6 +578,7 @@
 
     initDisclosure("havana-toggle", "havana-detail");
     initDisclosure("clay-toggle", "clay-detail");
+    initDisclosure("adamsmith-toggle", "adamsmith-detail", { exclusive: false });
   })();
   </script>
 </body>
