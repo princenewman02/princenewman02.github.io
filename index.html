@@ -217,13 +217,10 @@
     margin: 0 0 1em;
   }
 
-  /* Hover-triggered disclosure ("Adam Smith") -------------------- */
+  /* Static image figure below a paragraph ------------------------ */
 
-  .hover-toggle {
-    cursor: pointer;
-    text-decoration: underline dotted;
-    text-decoration-color: var(--muted);
-    text-underline-offset: 2px;
+  .disclosure-figure {
+    margin: 0.4em 0 1.6em;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -327,60 +324,89 @@
     <div id="havana-detail" class="disclosure" role="region" aria-labelledby="havana-toggle" hidden>
       <div class="disclosure-inner">
         <p class="disclosure-text disclosure-headline">GTM infrastructure that learns how markets open</p>
-        <p class="disclosure-text">
+                <p class="disclosure-text">
           Trade is what makes us human.
-          <span id="adamsmith-toggle" class="hover-toggle" tabindex="0" aria-expanded="false" aria-controls="adamsmith-detail">Adam Smith argues in the &ldquo;Wealth of Nations&rdquo;</span>
-          that Humans have an
+          Adam Smith argues in the &ldquo;Wealth of Nations&rdquo;
+          that humans have an
           &ldquo;innate propensity to truck, barter, and exchange&rdquo;; a
           propensity that only humans have, and essentially the greatest
-          force behind human economic progress. From ports and roads to
-          railways, electricity, shipping networks, banks, and the internet,
-          each generation has built new infrastructure that made it easier
-          for people, goods, ideas, and businesses to move between markets.
+          force behind human economic progress. Much of human history can be 
+          understood through our attempts to make that exchange easier. We built 
+          ports to connect distant places, railways to move goods across land, 
+          banks to move capital, and eventually the internet to connect people 
+          and businesses across the world. Each generation has built new infrastructure
+          to make exchange easier. We think we are entering another such moment. 
         </p>
 
-        <div id="adamsmith-detail" class="disclosure" role="region" aria-labelledby="adamsmith-toggle" hidden>
-          <div class="disclosure-inner">
-            <div class="disclosure-image-row">
-              <img class="disclosure-photo" src="/images/adam-smith.jpg" alt="Portrait of Adam Smith" width="140" height="241">
-              <a href="https://www.amazon.com/dp/B001QUD366?lv=shuf&amp;channelId=500&amp;plpRedirect=mhFallback" target="_blank" rel="noopener" class="disclosure-portrait">
-                <img class="disclosure-photo" src="/images/wealth-of-nations.jpg" alt="Title page of An Inquiry into the Nature and Causes of the Wealth of Nations" width="140" height="241">
-              </a>
-            </div>
-            <p class="disclosure-caption">Image left: Adam Smith. Image right: Wealth of Nations book.</p>
+        <figure class="disclosure-figure">
+          <div class="disclosure-image-row">
+            <img class="disclosure-photo" src="/images/adam-smith.jpg" alt="Portrait of Adam Smith" width="140" height="241">
+            <a href="https://www.amazon.com/dp/B001QUD366?lv=shuf&amp;channelId=500&amp;plpRedirect=mhFallback" target="_blank" rel="noopener" class="disclosure-portrait">
+              <img class="disclosure-photo" src="/images/wealth-of-nations.jpg" alt="Title page of An Inquiry into the Nature and Causes of the Wealth of Nations" width="140" height="241">
+            </a>
           </div>
-        </div>
+          <figcaption class="disclosure-caption">Image left: Adam Smith. Image right: Wealth of Nations book.</figcaption>
+        </figure>
         <p class="disclosure-text">
-          Today, machines are becoming participants in this process too.
-          This is such an exciting time in the history of human
-          civilisation. Machines are now much more capable of searching
-          across enormous amounts of information, understand relationships
-          between people and organizations, reason about unfamiliar markets,
-          and carry work forward on their own. We think this creates a new
-          opportunity: to build systems beyond helping businesses find
-          markets, also understand and navigate them.
+          Machines are becoming remarkably capable of navigating information. 
+          They can search across enormous bodies of knowledge, make sense of 
+          unfamiliar subjects, recognize relationships, and increasingly carry 
+          work forward on their own. Yet much of the information businesses need 
+          remains difficult to work with. It is scattered across different 
+          platforms, databases, communities, and systems, each with its own 
+          way of organizing and exposing information. This creates a particular 
+          distribution problem. 
         </p>
         <p class="disclosure-callout">
-          Havana exists to build the GTM infrastructure that learns how
-          markets open. We&rsquo;re starting with how businesses enter new
-          markets, with the goal of massively reducing the time and effort
-          it takes to bring a product to market.
+          The challenge is rarely just finding out that a market exists. A business
+          needs to understand who matters within it, where its customers gather, 
+          which organizations shape it, and how a path into that market might actually
+          be opened for distribution. Much of that knowledge exists somewhere, but accessing it, 
+          connecting it, and turning it into useful intent signals can still require a great
+          deal of manual work.
+        </p>
+        <p class="disclosure-callout">
+          Havana exists to build the Community GTM infrastructure that learns how
+          markets open. We're giving businesses a simple way to work with fragmented 
+          information about the markets they want to enter and turn it into a clearer 
+          path forward. Havana is capable of bringing structured signal, intent data, 
+          contact data, and firmographics from the most unreachable, hard to access 
+          communities on the internet into a unified, programmable layer, then uses 
+          powerful GTM agents to investigate and derive what matters within it. 
         </p>
         <p class="disclosure-text">
-          Recent breakthrough technology has made it possible to make market entry
-          and distribution programmable. We are now much more capable of
-          mapping markets and the relationships within them, finding the
-          paths that can open them, helping businesses execute those paths,
-          measuring what happens, and learning from every market they enter.
+          The scale of the underlying information matters.
+          A market can contain thousands of people and organizations, yet only a 
+          handful may be relevant to a particular business. Businesses should be able to 
+          move from the breadth of a market to the high-value prospects 
+          that actually matter such as the community leader who can open a door, the 
+          organization that reaches the right audience, or the distribution path 
+          that is worth pursuing.
         </p>
         <p class="disclosure-text">
-          We are inspired by designers, archaeologists, geographers,
-          mathematicians, architects, and the places and systems they study.
-          Each gives us a different way of thinking about how people,
-          places, networks, and economies connect. This is part of why we
-          are named after Havana, whose geography made it a major gateway in
-          the history of global trade as &ldquo;the key to the new
-          world&rdquo;.
+          From there, the system can help carry the work forward. It can research
+          a prospect, enrich what is known about them, suggest how to approach 
+          them, and support the execution of a campaign or activation. 
+          What happens next becomes another source of information. That creates
+          the part of Havana we find most interesting which is the possibility
+          of a system that learns from market entry itself. Every attempt reveals
+          something about the fabric of a market. Over time, those lessons make 
+          the next entry less dependent on starting from scratch.
+        </p>
+        <p class="disclosure-text">
+          We are inspired by the people who spend their lives trying to 
+          understand how the world fits together. Designers study how people
+          interact with systems. Geographers study how places shape human 
+          behavior. Archaeologists reconstruct civilizations from fragments 
+          left behind. Each offers a different way of seeing connections that 
+          are easy to miss when looking at the world one piece at a time. 
+        </p>
+        <p class="disclosure-text">
+          This is also part of the thinking behind our name. Havana became a 
+          major gateway for global trade because of where it sat. Its geography 
+          connected routes between continents and made it a critical point through
+          which people and goods moved. It became known as &ldquo;the key to 
+          the new world&rdquo;.
         </p>
         <p class="disclosure-text">
           That idea of a gateway is important to us for human capability as
@@ -390,8 +416,8 @@
           and help a business take those paths easily, quickly and smartly.
         </p>
         <p class="disclosure-text">
-          This is hard to achieve, and we believe there has never been a
-          better time to build this.
+          This is hard. But the pieces are finally coming together, and we 
+          think there has never been a better time to build it.
         </p>
       </div>
     </div>
@@ -703,60 +729,6 @@
 
     initDisclosure("havana-toggle", "havana-detail");
     initDisclosure("clay-toggle", "clay-detail");
-
-    // "Adam Smith" opens on hover/focus rather than click, so it needs its
-    // own wiring: expand immediately, but debounce the collapse so moving
-    // the pointer from the trigger into the panel doesn't flicker it shut.
-    function initHoverDisclosure(triggerId, panelId) {
-      var trigger = document.getElementById(triggerId);
-      var panel = document.getElementById(panelId);
-      if (!trigger || !panel) return;
-
-      var hideTimer = null;
-      var hideOnEnd = null;
-
-      function expand() {
-        clearTimeout(hideTimer);
-        if (hideOnEnd) {
-          panel.removeEventListener("transitionend", hideOnEnd);
-          hideOnEnd = null;
-        }
-        panel.hidden = false;
-        void panel.offsetHeight;
-        trigger.setAttribute("aria-expanded", "true");
-        panel.classList.add("open");
-      }
-
-      function collapseNow() {
-        trigger.setAttribute("aria-expanded", "false");
-        panel.classList.remove("open");
-        if (reduce) {
-          panel.hidden = true;
-          return;
-        }
-        hideOnEnd = function (e) {
-          if (e.target === panel && e.propertyName === "grid-template-rows") {
-            panel.hidden = true;
-            hideOnEnd = null;
-          }
-        };
-        panel.addEventListener("transitionend", hideOnEnd, { once: true });
-      }
-
-      function scheduleCollapse() {
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(collapseNow, 150);
-      }
-
-      trigger.addEventListener("mouseenter", expand);
-      trigger.addEventListener("mouseleave", scheduleCollapse);
-      trigger.addEventListener("focus", expand);
-      trigger.addEventListener("blur", scheduleCollapse);
-      panel.addEventListener("mouseenter", function () { clearTimeout(hideTimer); });
-      panel.addEventListener("mouseleave", scheduleCollapse);
-    }
-
-    initHoverDisclosure("adamsmith-toggle", "adamsmith-detail");
   })();
   </script>
 </body>
